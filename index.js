@@ -1,6 +1,6 @@
 // === Constants ===
 const BASE = "https://fsa-crud-2aa9294fe819.herokuapp.com/api";
-const COHORT = ""; // Make sure to change this!
+const COHORT = "/2608-ftb-ct-web-pt"; // Make sure to change this!
 const API = BASE + COHORT;
 
 // === State ===
@@ -28,6 +28,18 @@ async function getParty(id) {
     const result = await response.json();
     selectedParty = result.data;
     render();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function deleteParty(id) {
+  try {
+    const response = await fetch(API + "/events/" + id, { method: "DELETE" });
+    if (response.ok) {
+      selectedParty = null;
+      await getParties();
+    }
   } catch (e) {
     console.error(e);
   }
@@ -101,9 +113,13 @@ function SelectedParty() {
     </time>
     <address>${selectedParty.location}</address>
     <p>${selectedParty.description}</p>
+    <button>Delete party</button>
     <GuestList></GuestList>
   `;
   $party.querySelector("GuestList").replaceWith(GuestList());
+  $party
+    .querySelector("button")
+    .addEventListener("click", () => deleteParty(selectedParty.id));
 
   return $party;
 }
@@ -113,8 +129,8 @@ function GuestList() {
   const $ul = document.createElement("ul");
   const guestsAtParty = guests.filter((guest) =>
     rsvps.find(
-      (rsvp) => rsvp.guestId === guest.id && rsvp.eventId === selectedParty.id
-    )
+      (rsvp) => rsvp.guestId === guest.id && rsvp.eventId === selectedParty.id,
+    ),
   );
 
   // Simple components can also be created anonymously:
