@@ -124,6 +124,27 @@ function SelectedParty() {
   return $party;
 }
 
+function NewPartyForm() {
+  const $form = document.createElement("form");
+  $form.innerHTML = `
+  <label>Name</label>
+  <input name="name"></input>
+  <label>Description</label>
+  <input name="description"></input>
+  <label>Date</label>
+  <input name="date" type="date"></input>
+  <label>Location</label>
+  <input name="location"></input>
+  <button>Add party</button>
+  `;
+  $form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    console.log("whattup");
+  });
+
+  return $form;
+}
+
 /** List of guests attending the selected party */
 function GuestList() {
   const $ul = document.createElement("ul");
@@ -153,6 +174,7 @@ function render() {
       <section>
         <h2>Upcoming Parties</h2>
         <PartyList></PartyList>
+        <formPlaceholder></formPlaceholder>
       </section>
       <section id="selected">
         <h2>Party Details</h2>
@@ -163,6 +185,7 @@ function render() {
 
   $app.querySelector("PartyList").replaceWith(PartyList());
   $app.querySelector("SelectedParty").replaceWith(SelectedParty());
+  $app.querySelector("formPlaceholder").replaceWith(NewPartyForm());
 }
 
 async function init() {
