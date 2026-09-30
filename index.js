@@ -52,7 +52,9 @@ async function addParty(party) {
       body: JSON.stringify(party),
       headers: { "Content-Type": "application/json" },
     });
-    const result = await response.json();
+    if (response.ok) {
+      await getParties();
+    }
   } catch (e) {
     console.error(e);
   }
