@@ -45,6 +45,19 @@ async function deleteParty(id) {
   }
 }
 
+async function addParty(party) {
+  try {
+    const response = await fetch(API + "/events", {
+      method: "POST",
+      body: JSON.stringify(party),
+      headers: { "Content-Type": "application/json" },
+    });
+    const result = await response.json();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 /** Updates state with all RSVPs from the API */
 async function getRsvps() {
   try {
@@ -139,7 +152,13 @@ function NewPartyForm() {
   `;
   $form.addEventListener("submit", (event) => {
     event.preventDefault();
-    console.log("whattup");
+    const data = new FormData($form);
+    const name = data.get("name");
+    const description = data.get("description");
+    const date = data.get("date");
+    const isoDate = new Date(date).toISOString();
+    const location = data.get("location");
+    addParty({ name, description, date: isoDate, location });
   });
 
   return $form;
